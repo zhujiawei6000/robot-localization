@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.15)
+project(RobotLocalization CXX)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+find_package(Eigen3 REQUIRED)
+# add_executable(${CMAKE_PROJECT_NAME} main.cxx)
+file(GLOB_RECURSE sources CONFIGURE_DEPENDS "src/*.cpp")
+
+add_library(${CMAKE_PROJECT_NAME} ${sources})
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Eigen3::Eigen)
+target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include)
