@@ -1,4 +1,4 @@
-
+#include <cmath>
 namespace pf {
 double NormalizeAngle(double x) {
   x = fmod(x, 360);

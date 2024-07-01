@@ -1,12 +1,13 @@
 #pragma once
+#include "simulator/measurement.h"
+#include "simulator/utils.h"
+#include "simulator/world.h"
 #include <cmath>
 #include <random>
 #include <vector>
-#include "simulator/measurement.h"
-#include "simulator/world.h"
-#include "simulator/utils.h"
 namespace pf {
 class Robot {
+public:
   Robot(float x, float y, float yaw, float forward_std, float turn_std,
         float measure_distance_std, float measure_angle_std)
       : x_{x}, y_{y}, yaw_{yaw}, forward_std_{forward_std}, turn_std_{turn_std},
@@ -23,18 +24,18 @@ class Robot {
   std::vector<LandmarkLidarMeasurement> Measure(World world) {
     std::vector<LandmarkLidarMeasurement> measurements;
     measurements.reserve(world.Landmarks().size());
-    for (auto& landmark : world.Landmarks()) {
+    for (auto &landmark : world.Landmarks()) {
       float dx = x_ - landmark.x;
       float dy = y_ - landmark.y;
-      float distance = GaussianNoisySample(std::hypot(dx, dy), measure_distance_std_);
+      float distance =
+          GaussianNoisySample(std::hypot(dx, dy), measure_distance_std_);
       float angle = GaussianNoisySample(std::atan2(dy, dx), measure_angle_std_);
       measurements.emplace_back(landmark.id, distance, angle);
     }
     return measurements;
-
   }
-private:
 
+private:
   float GaussianNoisySample(float mean, float std) {
     std::random_device rnd{};
     std::mt19937 gen(rnd());
@@ -50,4 +51,4 @@ private:
   float measure_angle_std_;
 };
 
-} // namespace kf
+} // namespace pf
